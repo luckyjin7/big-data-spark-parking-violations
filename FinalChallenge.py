@@ -136,7 +136,7 @@ if __name__ == "__main__":
     join = " on cscl.borocode == vio.borocode and vio.street == cscl.street and vio.is_left == cscl.is_left"
     cond = " where vio.house_n >= cscl.low and vio.house_n <= cscl.high"
     group = " group by cscl.physical_id, vio.year"
-    df_join = sq.sql("select cscl.physical_id, year, count(*) as count from cscl left join vio " + join + cond + group)
+    df_join = sq.sql("select cscl.physical_id, year, count(*) as count from vio left join cscl " + join + cond + group)
 
     df_join.rdd.map(lambda x: ((x[0], x[1]), x[2])) \
         .mapPartitions(processYear) \
