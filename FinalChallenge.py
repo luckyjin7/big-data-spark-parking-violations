@@ -141,15 +141,10 @@ if __name__ == "__main__":
     spark = SparkSession(sc)
     sq = SQLContext(sc)
 
-    # for complete test in hdfs
-    # rdd_cscl = sc.textFile('hdfs:///tmp/bdm/nyc_cscl.csv').mapPartitionsWithIndex(process_cscl)
-    # rdd_violations = sc.textFile('hdfs:///tmp/bdm/nyc_parking_violation/').mapPartitionsWithIndex(process_violation)
-
-    # for a local simple test
     df_cscl = sq.createDataFrame(
-        sc.textFile('data/nyc_cscl.csv').mapPartitionsWithIndex(process_cscl))
+        sc.textFile('hdfs:///tmp/bdm/nyc_cscl.csv').mapPartitionsWithIndex(process_cscl))
     df_vio = sq.createDataFrame(
-        sc.textFile('data/2016.csv').mapPartitionsWithIndex(process_violation))
+        sc.textFile('hdfs:///tmp/bdm/nyc_parking_violation/').mapPartitionsWithIndex(process_violation))
 
     # register a temp table in spark sql
     df_cscl.registerTempTable("cscl")
