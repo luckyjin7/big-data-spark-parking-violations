@@ -87,8 +87,7 @@ def process_violation(r, record):
                     is_left = int(house_n) % 2
                     house_n = float(before + '.' + house_n)
                 except:
-                    # continue
-                    house_n = -1
+                    continue
         else:
             continue
 
@@ -141,10 +140,8 @@ if __name__ == "__main__":
     spark = SparkSession(sc)
     sq = SQLContext(sc)
 
-    df_cscl = sq.createDataFrame(
-        sc.textFile('hdfs:///tmp/bdm/nyc_cscl.csv').mapPartitionsWithIndex(process_cscl))
-    df_vio = sq.createDataFrame(
-        sc.textFile('hdfs:///tmp/bdm/nyc_parking_violation/').mapPartitionsWithIndex(process_violation))
+    df_cscl = sq.createDataFrame(sc.textFile('hdfs:///tmp/bdm/nyc_cscl.csv').mapPartitionsWithIndex(process_cscl))
+    df_vio = sq.createDataFrame(sc.textFile('hdfs:///tmp/bdm/nyc_parking_violation/').mapPartitionsWithIndex(process_violation))
 
     # register a temp table in spark sql
     df_cscl.registerTempTable("cscl")
