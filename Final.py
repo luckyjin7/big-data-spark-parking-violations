@@ -169,7 +169,8 @@ if __name__ == "__main__":
     group = " group by cscl.physical_id, vio.year"
     df_join = sq.sql("select cscl.physical_id, year, count(*) as count from cscl left join vio " + join + cond + group)
 
-    df_join.rdd.map(lambda x: ((x[0], x[1]), x[2]))\         .mapPartitions(processYear)\
+    df_join.rdd.map(lambda x: ((x[0], x[1]), x[2]))\         
+        .mapPartitions(processYear)\
         .reduceByKey(lambda x, y: (x[0] + y[0], x[1] + y[1], x[2] + y[2], x[3] + y[3], x[4] + y[4]))\
         .sortByKey()\
         .mapValues(lambda y: y + (computeOLS(y=list(y)),))\
